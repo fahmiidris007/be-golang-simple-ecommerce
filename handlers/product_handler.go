@@ -13,17 +13,17 @@ func ListProducts(db *gorm.DB) gin.HandlerFunc {
 		var products []models.Product
 		var wg sync.WaitGroup
 
-		//menambahkan 1 goroutine ke WaitGroup
+		//add 1 goroutine to WaitGroup
 		wg.Add(1)
 
-		//memulai goroutine untuk melakukan operasi yang membutuhkan waktu lama
+		//start goroutine
 		go func() {
-			defer wg.Done() //menandai bahwa goroutine telah selesai
-			//mendapatkan data list product dari database
+			defer wg.Done() //goroutine is done
+			//get list of products from database
 			db.Find(&products)
 		}()
 
-		//menunggu semua goroutine selesai
+		//wait until all goroutines are done
 		wg.Wait()
 
 		c.JSON(200, products)
